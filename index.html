@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICU Bed & Resource Forecasting</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <h2>ICU<span class="highlight">Predict</span></h2>
+        </div>
+        
+        <nav class="menu">
+            <a href="#" class="active"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
+            <a href="#"><i class="fa-solid fa-lungs"></i> <span>Resources</span></a>
+            <a href="#"><i class="fa-solid fa-hospital"></i> <span>Analysis</span></a>
+        </nav>
+
+        <div class="upload-section">
+            <label for="csvUpload" class="upload-btn">
+                <i class="fa-solid fa-upload"></i> <span style="margin-left:5px">Upload CSV</span>
+            </label>
+            <input type="file" id="csvUpload" accept=".csv">
+            <p class="small-text">Supports: data.csv</p>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header>
+            <div class="header-title">
+                <h1>Critical Care Command Center</h1>
+                <p>Real-time Bed Availability & Predictive Analytics</p>
+            </div>
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Facility Filter:</label>
+                    <select id="facilityFilter">
+                        <option value="all">All Facilities</option>
+                        </select>
+                </div>
+            </div>
+        </header>
+
+        <div class="kpi-grid">
+            <div class="card kpi-card">
+                <div class="icon-box blue" id="icon-total"><i class="fa-solid fa-bed"></i></div>
+                <div class="kpi-info">
+                    <h3>Total ICU Beds</h3>
+                    <p id="kpi-total-beds">0</p>
+                    <span id="badge-total" class="kpi-badge"></span>
+                </div>
+            </div>
+            
+            <div class="card kpi-card">
+                <div class="icon-box red" id="icon-occ"><i class="fa-solid fa-procedures"></i></div>
+                <div class="kpi-info">
+                    <h3>Occupied</h3>
+                    <p id="kpi-occupied">0</p>
+                    <span id="badge-occ" class="kpi-badge"></span>
+                </div>
+            </div>
+            
+            <div class="card kpi-card">
+                <div class="icon-box green" id="icon-avail"><i class="fa-solid fa-door-open"></i></div>
+                <div class="kpi-info">
+                    <h3>Available</h3>
+                    <p id="kpi-available">0</p>
+                    <span id="badge-avail" class="kpi-badge"></span>
+                </div>
+            </div>
+            
+            <div class="card kpi-card">
+                <div class="icon-box purple" id="icon-util"><i class="fa-solid fa-chart-pie"></i></div>
+                <div class="kpi-info">
+                    <h3>Utilization</h3>
+                    <p id="kpi-utilization">0%</p>
+                    <span id="badge-util" class="kpi-badge"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            
+            <div class="left-col">
+                
+                <div class="card chart-container">
+                    <div class="chart-header">
+                        <h3><i class="fa-solid fa-chart-area"></i> 7-Day ICU Forecast</h3>
+                        <span class="badge">Linear Regression Model</span>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="forecastChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card resource-container">
+                    <div class="chart-header">
+                        <h3><i class="fa-solid fa-box-medical"></i> Resource Monitor</h3>
+                        <span class="badge">Live Availability</span>
+                    </div>
+                    
+                    <div class="resource-grid">
+                        <div class="res-card">
+                            <div class="res-icon"><i class="fa-solid fa-lungs"></i></div>
+                            <div class="res-details">
+                                <h4>Ventilators</h4>
+                                <div class="res-nums">
+                                    <span id="vent-used" class="big-num">0</span>
+                                    <span class="sub-num">/ <span id="vent-total">0</span></span>
+                                </div>
+                            </div>
+                            <div class="res-status">
+                                <span id="vent-badge" class="status-badge safe">--</span>
+                            </div>
+                            <div class="progress-bg">
+                                <div id="vent-bar" class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="res-card">
+                            <div class="res-icon"><i class="fa-solid fa-user-shield"></i></div>
+                            <div class="res-details">
+                                <h4>Isolation Beds</h4>
+                                <div class="res-nums">
+                                    <span id="isol-used" class="big-num">0</span>
+                                    <span class="sub-num">/ <span id="isol-total">0</span></span>
+                                </div>
+                            </div>
+                            <div class="res-status">
+                                <span id="isol-badge" class="status-badge warning">--</span>
+                            </div>
+                            <div class="progress-bg">
+                                <div id="isol-bar" class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="res-card">
+                            <div class="res-icon"><i class="fa-solid fa-bed-pulse"></i></div>
+                            <div class="res-details">
+                                <h4>Ward Beds</h4>
+                                <div class="res-nums">
+                                    <span id="ward-used" class="big-num">0</span>
+                                    <span class="sub-num">/ <span id="ward-total">0</span></span>
+                                </div>
+                            </div>
+                            <div class="res-status">
+                                <span id="ward-badge" class="status-badge critical">--</span>
+                            </div>
+                            <div class="progress-bg">
+                                <div id="ward-bar" class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-col">
+                <div class="card watchlist-container">
+                    <div class="chart-header">
+                        <h3><i class="fa-solid fa-tower-broadcast"></i> Critical Watchlist</h3>
+                        <span class="badge" style="background:var(--danger); color:white;">Live Feed</span>
+                    </div>
+                    <div class="watchlist-filters">
+                        <small>Showing all facilities > 70% Util</small>
+                    </div>
+                    <div id="riskFeed" class="watchlist-feed">
+                        <div style="text-align:center; padding:20px; color:#666;">Waiting for data...</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card table-container">
+            <h3>Detailed Logs</h3>
+            <div class="table-wrapper">
+                <table id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Facility</th>
+                            <th>ICU Occ</th>
+                            <th>Vents Occ</th>
+                            <th>Ward Occ</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
