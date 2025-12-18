@@ -39,12 +39,23 @@
                 <h1>Critical Care Command Center</h1>
                 <p>Real-time Bed Availability & Predictive Analytics</p>
             </div>
-            <div class="filters">
-                <div class="filter-group">
-                    <label>Facility Filter:</label>
-                    <select id="facilityFilter">
-                        <option value="all">All Facilities</option>
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>From:</label>
+                        <input type="date" id="dateFrom">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>To:</label>
+                        <input type="date" id="dateTo">
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Facility:</label>
+                        <select id="facilityFilter">
+                            <option value="all">All Facilities</option>
                         </select>
+                    </div>
                 </div>
             </div>
         </header>
@@ -197,6 +208,18 @@
                 </table>
             </div>
         </div>
+
+
+        <footer class="dashboard-footer">
+            <p>
+                <strong>Data Sources:</strong> 
+                <a href="https://www.kaggle.com/datasets/cvronao/covid19-philippine-dataset" target="_blank">Kaggle (COVID-19 PH Dataset)</a> | 
+                <a href="https://www.vizientinc.com/insights/reports/data-on-the-edge/critical-care-capacity-planning-for-future-resources" target="_blank">Vizient Inc. (Critical Care Planning)</a>
+            </p>
+            <p class="copyright">&copy; 2025 ICU Predict Command Center. All rights reserved.</p>
+        </footer>
+
+
     </main>
 
     <script src="script.js"></script>

@@ -40,7 +40,41 @@ input[type="file"] { display: none; }
 header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
 h1 { font-size: 1.8rem; }
 header p { color: var(--text-muted); }
-.filters select { background: var(--bg-panel); color: white; padding: 10px 15px; border: 1px solid #444; border-radius: 6px; outline: none; }
+/* Update the .filters class to lay out items horizontally */
+.filters {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end; /* Align inputs to bottom */
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.filter-group label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Style for Inputs and Selects */
+.filters select, 
+.filters input[type="date"] { 
+    background: var(--bg-panel); 
+    color: white; 
+    padding: 10px 15px; 
+    border: 1px solid #444; 
+    border-radius: 6px; 
+    outline: none; 
+    font-family: inherit; /* Fixes font in date picker */
+}
+
+/* Fix calendar icon color in Chrome/Edge */
+::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
 
 /* KPI Grid */
 .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
@@ -314,4 +348,85 @@ tr:hover { background: #2a2a32; }
     
     /* Stack Dashboard Columns */
     .dashboard-grid { grid-template-columns: 1fr; }
+}
+
+/* --- NEW FOOTER STYLES --- */
+.dashboard-footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.dashboard-footer a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.dashboard-footer a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.dashboard-footer .copyright {
+    margin-top: 10px;
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+/* --- MOBILE RESPONSIVENESS (Update this section at the bottom of your CSS) --- */
+@media (max-width: 600px) {
+
+    /* ... (Keep your previous Layout/KPI/Resource fixes here) ... */
+
+    /* 1. Footer Mobile Adjustments */
+    .dashboard-footer {
+        font-size: 0.75rem; /* Smaller text */
+        padding-bottom: 20px; /* Add bottom spacing so it doesn't hit edge */
+    }
+
+    .dashboard-footer p {
+        display: flex;
+        flex-direction: column; /* Stack links vertically */
+        gap: 5px;
+    }
+
+    /* Remove the pipe separator "|" on mobile since we are stacking */
+    .dashboard-footer p::before { 
+        content: ''; 
+    }
+    
+    /* 2. Previous Responsive Fixes (Recap for safety) */
+    .res-card { display: block; position: relative; padding: 15px 15px 20px 15px; }
+    .res-icon { display: none; } 
+    .res-status { position: absolute; top: 15px; right: 15px; }
+    .status-badge { font-size: 0.65rem; white-space: nowrap; }
+    .res-details { margin-bottom: 10px; width: 65%; }
+    
+    header { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .filters, .filters select { width: 100%; }
+    .kpi-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .main-content { padding: 15px; margin-left: 0; }
+    .sidebar { position: relative; width: 100%; padding: 10px; }
+    .sidebar .menu, .upload-btn span, .small-text { display: none; }
+    .dashboard-grid { grid-template-columns: 1fr; }
+
+    /* Update Filters to stack vertically */
+    .filters { 
+        flex-direction: column; 
+        width: 100%; 
+        gap: 15px;
+    }
+    
+    .filter-group { 
+        width: 100%; 
+    }
+    
+    .filters select, 
+    .filters input[type="date"] { 
+        width: 100%; 
+    }
 }
